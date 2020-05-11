@@ -9,6 +9,7 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
   }
+  *:focus {outline:0;}
   body {
     background: #fff;
     color: ${({ theme }) => theme.black};

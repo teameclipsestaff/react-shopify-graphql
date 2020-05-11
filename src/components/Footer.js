@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -14,17 +15,17 @@ const Footer = () => {
         </Row>
         <Row>
           <h1>Contact Us</h1>
-          <a href="">(123) 456-7890</a>
-          <a href="">reactshop@gmail.com</a>
-          <a href="">123 React ln, New York, NY</a>
+          <Link to="">(123) 456-7890</Link>
+          <Link to="">reactshop@gmail.com</Link>
+          <Link to="">123 React ln, New York, NY</Link>
         </Row>
         <Row>
           <h1>Links</h1>
-          <a href="">About Us</a>
-          <a href="">FAQ</a>
-          <a href="">Return Policy</a>
-          <a href="">Support</a>
-          <a href="">Privacy Policy</a>
+          <Link to="">About Us</Link>
+          <Link to="">FAQ</Link>
+          <Link to="">Return Policy</Link>
+          <Link to="">Support</Link>
+          <Link to="">Privacy Policy</Link>
         </Row>
       </Wrapper>
     </Container>

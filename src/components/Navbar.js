@@ -21,10 +21,10 @@ const Navbar = () => {
         <MenuLink to="/login">Login</MenuLink>
         <MenuLink to="/signup">Sign Up</MenuLink>
         {/* <MenuLink href="">Account</MenuLink> */}
-        <IconLink href="">
+        <IconLink to="">
           <FiSearch />
         </IconLink>
-        <IconLink href="">
+        <IconLink to="">
           <FiShoppingBag />
         </IconLink>
       </Menu>
