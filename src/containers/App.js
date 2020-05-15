@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost";
+import ShopProvider from "../store/context";
 
 import Home from "./Home";
 import Shop from "./Shop";
@@ -31,32 +32,34 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <Layout>
-        <Router>
-          <Navbar />
-          <Switch>
-            <Route path="/shop">
-              <Shop />
-            </Route>
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/signup">
-              <Signup />
-            </Route>
-            <Route path="/product/:handle">
-              <Product />
-            </Route>
-            <Route path="/" exact>
-              <Home />
-            </Route>
-            <Route path="*">
-              <NoMatch />
-            </Route>
-          </Switch>
-          <Footer />
-        </Router>
-      </Layout>
+      <ShopProvider>
+        <Layout>
+          <Router>
+            <Navbar />
+            <Switch>
+              <Route path="/shop">
+                <Shop />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/signup">
+                <Signup />
+              </Route>
+              <Route path="/product/:handle">
+                <Product />
+              </Route>
+              <Route path="/" exact>
+                <Home />
+              </Route>
+              <Route path="*">
+                <NoMatch />
+              </Route>
+            </Switch>
+            <Footer />
+          </Router>
+        </Layout>
+      </ShopProvider>
     </ApolloProvider>
   );
 };
