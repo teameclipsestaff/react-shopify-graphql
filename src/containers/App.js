@@ -14,9 +14,9 @@ import NoMatch from "./NoMatch";
 import Product from "./Product";
 
 const client = new ApolloClient({
-  uri: "https://graphql.myshopify.com/api/2020-04/graphql.json",
+  uri: "https://mytestreactstore.myshopify.com/api/2020-04/graphql.json",
   headers: {
-    "X-Shopify-Storefront-Access-Token": "dd4d4dc146542ba7763305d71d1b3d38",
+    "X-Shopify-Storefront-Access-Token": "6f0e809501221878c8de39ed5094ec20",
   },
   // typeDefs: gql`
   //   enum ProductSortKeys {

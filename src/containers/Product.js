@@ -1,54 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import gql from "graphql-tag";
 import { useQuery } from "@apollo/react-hooks";
-
-export const GET_PRODUCT_QUERY = gql`
-  query getProduct($handle: String!) {
-    productByHandle(handle: $handle) {
-      id
-      description
-      title
-      productType
-      variants(first: 10) {
-        edges {
-          node {
-            priceV2 {
-              amount
-              currencyCode
-            }
-            image {
-              originalSrc
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+import { GET_PRODUCT_QUERY } from "../store/query";
+import ProductWrapper from "../components/ProductWrapper";
+import Loading from "../components/Loading";
 
 const Product = () => {
   const { handle } = useParams();
-  console.log(handle);
+  const [selectedOptions, setSelectedOptions] = useState();
+  const [selectedVariant, setSelectedVariant] = useState();
+  const [selectedImage, setSelectedImage] = useState();
+  const [itemQuantity, setItemQuantity] = useState(1);
 
   const { loading, error, data } = useQuery(GET_PRODUCT_QUERY, {
     variables: { handle },
+    onCompleted: ({ productByHandle }) => {
+      let newOptions = {};
+
+      setSelectedImage(productByHandle.images.edges[0].node.originalSrc);
+      productByHandle.options[0] &&
+        productByHandle.options.forEach((option) => {
+          newOptions = { ...newOptions, [option.name]: option.values[0] };
+          setSelectedOptions(newOptions);
+        });
+    },
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error {console.log(error)}</p>;
-  console.log(error);
+  const handleOptionChange = (event) => {
+    const target = event.target;
+    let newSelectedOptions = selectedOptions;
+    newSelectedOptions[target.name] = target.value;
 
-  const { title, description, productType, variants } = data.productByHandle;
-  console.log(variants);
+    const newSelectedVariant = data.productByHandle.variants.edges.find(
+      (variant) => {
+        return variant.node.selectedOptions.every((selectedOption) => {
+          return (
+            newSelectedOptions[selectedOption.name] ===
+            selectedOption.value.valueOf()
+          );
+        });
+      }
+    );
+    setSelectedImage(newSelectedVariant.node.image.originalSrc);
+    setSelectedVariant(newSelectedVariant.node);
+    console.log(newSelectedVariant);
+  };
+
+  if (loading) return <Loading />;
+  if (error) return <p>Error {console.log(error)}</p>;
+
+  const { variants } = selectedVariant || data.productByHandle;
 
   return (
     <div>
-      <h2>{title}</h2>
-      <h3>{productType}</h3>
-      <p>{description}</p>
-      <h4>${variants.edges[0].node.priceV2.amount}</h4>
-      <img src={variants.edges[0].node.image.originalSrc} alt={title} />
+      <ProductWrapper
+        product={data.productByHandle}
+        price={
+          selectedVariant
+            ? selectedVariant.priceV2.amount
+            : variants.edges[0].node.priceV2.amount
+        }
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+        handleOptionChange={handleOptionChange}
+        itemQuantity={itemQuantity}
+        setItemQuantity={setItemQuantity}
+      />
     </div>
   );
 };

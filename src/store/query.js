@@ -1,5 +1,47 @@
 import { gql } from "apollo-boost";
 
+export const GET_PRODUCT_QUERY = gql`
+  query getProduct($handle: String!) {
+    productByHandle(handle: $handle) {
+      id
+      description
+      title
+      productType
+      options {
+        id
+        name
+        values
+      }
+      images(first: 20) {
+        edges {
+          node {
+            originalSrc
+          }
+        }
+      }
+      variants(first: 200) {
+        edges {
+          node {
+            title
+            id
+            priceV2 {
+              amount
+              currencyCode
+            }
+            image {
+              originalSrc
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const FETCH_PRODUCTS = gql`
   query(
     $first: Int
