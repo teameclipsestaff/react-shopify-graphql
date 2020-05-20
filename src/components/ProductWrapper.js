@@ -10,6 +10,7 @@ const ProductWrapper = ({
   setSelectedImage,
   itemQuantity,
   setItemQuantity,
+  addToCart,
 }) => {
   const { title, options, description, productType, images } = product;
   return (
@@ -43,11 +44,11 @@ const ProductWrapper = ({
           <input
             type="text"
             value={itemQuantity}
-            onChange={(event) => setItemQuantity(event.target.value)}
+            onChange={(event) => setItemQuantity(parseInt(event.target.value))}
           />
         </OptionsContainer>
         <p>{description}</p>
-        <AddToCartBtn>Add To Cart</AddToCartBtn>
+        <AddToCartBtn onClick={() => addToCart()}>Add To Cart</AddToCartBtn>
       </InfoContainer>
     </Container>
   );

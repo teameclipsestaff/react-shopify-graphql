@@ -1,5 +1,146 @@
 import { gql } from "apollo-boost";
 
+export const UPDATE_CHECKOUT = gql`
+  mutation MyMutation(
+    $checkoutId: ID = "Z2lkOi8vc2hvcGlmeS9DaGVja291dC8zZWNkMDE3MGJkNjIwYzNiMjVkZDg5NGFhYTNhM2RhMT9rZXk9MTc0MzJlYmM4YjBmNDc1NTQxY2E4ZjQwZTFlNjNiMmE="
+    $lineItems: [CheckoutLineItemInput!]!
+  ) {
+    checkoutLineItemsReplace(checkoutId: $checkoutId, lineItems: $lineItems) {
+      checkout {
+        id
+        email
+        lineItems(first: 50) {
+          edges {
+            node {
+              quantity
+              title
+              id
+              variant {
+                id
+                image {
+                  originalSrc
+                }
+                priceV2 {
+                  amount
+                }
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+        lineItemsSubtotalPrice {
+          amount
+        }
+        totalPriceV2 {
+          amount
+        }
+        totalTaxV2 {
+          amount
+        }
+        subtotalPriceV2 {
+          amount
+        }
+        order {
+          orderNumber
+        }
+      }
+    }
+  }
+`;
+
+export const FETCH_CHECKOUT = gql`
+  query($id: ID!) {
+    node(id: $id) {
+      ... on Checkout {
+        id
+        email
+        lineItems(first: 50) {
+          edges {
+            node {
+              quantity
+              title
+              id
+              unitPrice {
+                amount
+              }
+              variant {
+                id
+                image {
+                  originalSrc
+                }
+                priceV2 {
+                  amount
+                }
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+        lineItemsSubtotalPrice {
+          amount
+        }
+        totalPriceV2 {
+          amount
+        }
+        totalTaxV2 {
+          amount
+        }
+        subtotalPriceV2 {
+          amount
+        }
+        order {
+          orderNumber
+        }
+      }
+    }
+  }
+`;
+export const CREATE_CHECKOUT = gql`
+  mutation CreateCheckout {
+    checkoutCreate(input: {}) {
+      checkoutUserErrors {
+        code
+        field
+        message
+      }
+      checkout {
+        id
+        lineItems(first: 50) {
+          edges {
+            node {
+              id
+              quantity
+              title
+              unitPrice {
+                amount
+              }
+              variant {
+                id
+                image {
+                  originalSrc
+                }
+                priceV2 {
+                  amount
+                }
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_PRODUCT_QUERY = gql`
   query getProduct($handle: String!) {
     productByHandle(handle: $handle) {

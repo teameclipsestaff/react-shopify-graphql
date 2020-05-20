@@ -12,6 +12,7 @@ export const GlobalStyles = createGlobalStyle`
   *:focus {outline:0;}
   body {
     background: #fff;
+    overflow: ${({ isCartOpen }) => (isCartOpen ? "hidden" : "auto")};
     color: ${({ theme }) => theme.black};
     height: 100vh;
     margin: 0;

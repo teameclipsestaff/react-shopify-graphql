@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import LogoImg from "../assets/Logo.png";
 import { FiSearch, FiShoppingBag } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { ShopContext } from "../store/context";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { openCart } = useContext(ShopContext);
+
   return (
     <Nav>
       <Logo to="/">
@@ -24,7 +27,7 @@ const Navbar = () => {
         <IconLink to="">
           <FiSearch />
         </IconLink>
-        <IconLink to="">
+        <IconLink to="" onClick={() => openCart()}>
           <FiShoppingBag />
         </IconLink>
       </Menu>
@@ -33,6 +36,7 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 const MenuLink = styled(Link)`
   padding: 1rem 1.3rem;
   cursor: pointer;
@@ -44,12 +48,28 @@ const MenuLink = styled(Link)`
   color: ${({ theme }) => theme.gray};
   transition: all 0.3s ease-in;
 
+  body {
+    background: red;
+  }
+
   &:hover {
     color: ${({ theme }) => theme.primary};
   }
 `;
 
-const IconLink = styled(MenuLink)`
+const IconLink = styled.a`
+  padding: 1rem 1.3rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 400;
+  color: ${({ theme }) => theme.gray};
+  transition: all 0.3s ease-in;
+
+  &:hover {
+    color: ${({ theme }) => theme.primary};
+  }
   font-size: 1rem;
 `;
 
