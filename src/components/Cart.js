@@ -3,10 +3,17 @@ import styled from "styled-components";
 import { ShopContext } from "../store/context";
 import CartLineItem from "./CartLineItem";
 import { IoIosClose } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const { isCartOpen, closeCart, checkout } = useContext(ShopContext);
-  const { lineItems, subtotalPriceV2, totalTaxV2, totalPriceV2 } = checkout;
+  const {
+    lineItems,
+    subtotalPriceV2,
+    totalTaxV2,
+    totalPriceV2,
+    shippingLine,
+  } = checkout;
 
   return (
     <>
@@ -37,6 +44,12 @@ const Cart = () => {
                 <h3>Subtotal</h3>
                 <h3>${subtotalPriceV2.amount}</h3>
               </TotalRow>
+              {shippingLine && (
+                <TotalRow>
+                  <h3>Shipping</h3>
+                  <h3>${shippingLine.priceV2.amount}</h3>
+                </TotalRow>
+              )}
               <TotalRow>
                 <h3>Tax</h3>
                 <h3>${totalTaxV2.amount}</h3>
@@ -45,7 +58,9 @@ const Cart = () => {
                 <h3>Total</h3>
                 <h3>${totalPriceV2.amount}</h3>
               </TotalRow>
-              <CheckoutButon>Checkout</CheckoutButon>
+              <CheckoutButon onClick={() => closeCart()} to="/checkout/info">
+                Checkout
+              </CheckoutButon>
             </TotalSection>
           </>
         )}
@@ -84,7 +99,7 @@ const Header = styled.div`
   }
 `;
 
-const CheckoutButon = styled.a`
+const CheckoutButon = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;

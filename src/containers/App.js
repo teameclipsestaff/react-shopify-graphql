@@ -14,6 +14,7 @@ import Login from "./Login";
 import NoMatch from "./NoMatch";
 import Product from "./Product";
 import Cart from "../components/Cart";
+import Checkout from "./Checkout";
 
 const client = new ApolloClient({
   uri: "https://mytestreactstore.myshopify.com/api/2020-04/graphql.json",
@@ -40,6 +41,9 @@ const App = () => {
             <Switch>
               <Route path="/shop">
                 <Shop />
+              </Route>
+              <Route path="/checkout">
+                <Checkout />
               </Route>
               <Route path="/login">
                 <Login />

@@ -4,12 +4,14 @@ import {
   CREATE_CHECKOUT,
   FETCH_CHECKOUT,
   UPDATE_CHECKOUT,
+  UPDATE_SHIPPING_ADDRESS,
+  UPDATE_SHIPPING_LINE,
 } from "../store/query";
 import ShopReducer from "./ShopReducer";
 
 const initialState = {
   checkout: {},
-  isCartOpen: true,
+  isCartOpen: false,
 };
 const ShopContext = createContext(initialState);
 
@@ -18,7 +20,6 @@ export const ShopProvider = ({ children }) => {
 
   const [createCheckout] = useMutation(CREATE_CHECKOUT, {
     onCompleted: ({ checkoutCreate }) => {
-      console.log("created checkout");
       localStorage.setItem("storeCheckout", checkoutCreate.checkout.id);
       dispatch({
         type: "CHECKOUT_CREATED",
@@ -60,6 +61,44 @@ export const ShopProvider = ({ children }) => {
         payload: checkoutLineItemsReplace.checkout,
       });
       openCart();
+    },
+  });
+
+  const [updateShipping] = useMutation(UPDATE_SHIPPING_ADDRESS, {
+    onCompleted: ({ checkoutShippingAddressUpdateV2 }) => {
+      console.log(checkoutShippingAddressUpdateV2);
+
+      dispatch({
+        type: "UPDATE_SHIPPING_ADDRESS",
+        payload: checkoutShippingAddressUpdateV2.checkout,
+      });
+    },
+    onError: (data) => {
+      console.log("update shipping error", data);
+
+      dispatch({
+        type: "SHIPPING_ADDRESS_ERROR",
+        payload: data,
+      });
+    },
+  });
+
+  const [updateShippingLines] = useMutation(UPDATE_SHIPPING_LINE, {
+    onCompleted: ({ checkoutShippingLineUpdate }) => {
+      console.log(checkoutShippingLineUpdate);
+
+      dispatch({
+        type: "UPDATE_SHIPPING_LINES",
+        payload: checkoutShippingLineUpdate.checkout,
+      });
+    },
+    onError: (data) => {
+      console.log("update shipping line error", data);
+
+      dispatch({
+        type: "SHIPPING_LINES_ERROR",
+        payload: data,
+      });
     },
   });
 
@@ -112,6 +151,23 @@ export const ShopProvider = ({ children }) => {
     updateCart({ variables: { checkoutId: checkoutId, lineItems: lineItems } });
   };
 
+  const updateShippingAddress = (shippingAddress) => {
+    const checkoutId = state.checkout.id;
+    return updateShipping({
+      variables: { checkoutId: checkoutId, shippingAddress: shippingAddress },
+    });
+  };
+
+  const updateCartShippingLine = (shippingRateHandle) => {
+    const checkoutId = state.checkout.id;
+    return updateShippingLines({
+      variables: {
+        checkoutId: checkoutId,
+        shippingRateHandle: shippingRateHandle,
+      },
+    });
+  };
+
   const convertLineItemsArray = (oldArray) => {
     const lineItems = [];
     oldArray.forEach((lineItem) => {
@@ -141,6 +197,8 @@ export const ShopProvider = ({ children }) => {
         addVariantToCart,
         removeVariantFromCart,
         updateVariantInCart,
+        updateShippingAddress,
+        updateCartShippingLine,
       }}
     >
       {children}
